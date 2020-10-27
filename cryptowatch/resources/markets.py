@@ -255,33 +255,7 @@ class MarketOHLCAPIResponseSchema(Schema):
 class MarketOHLCAPIResponse:
     def __init__(self, result, allowance):
         if result.get("60", []):
-            self.of_1m = result.get("60", [])
-        if result.get("180", []):
-            self.of_3m = result.get("180", [])
-        if result.get("300", []):
-            self.of_5m = result.get("300", [])
-        if result.get("900", []):
-            self.of_15m = result.get("900", [])
-        if result.get("1800", []):
-            self.of_30m = result.get("1800", [])
-        if result.get("3600", []):
-            self.of_1h = result.get("3600", [])
-        if result.get("7200", []):
-            self.of_2h = result.get("7200", [])
-        if result.get("14400", []):
-            self.of_4h = result.get("14400", [])
-        if result.get("21600", []):
-            self.of_6h = result.get("21600", [])
-        if result.get("43200", []):
-            self.of_12h = result.get("43200", [])
-        if result.get("86400", []):
-            self.of_1d = result.get("86400", [])
-        if result.get("259200", []):
-            self.of_3d = result.get("259200", [])
-        if result.get("604800", []):
-            self.of_1w = result.get("604800", [])
-        if result.get("604800_Monday", []):
-            self.of_1w_monday = result.get("604800_Monday", [])
+            self.of_1m = result.get("60", )
         self._legend = [
             "close timestamp",
             "open",
