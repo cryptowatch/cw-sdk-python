@@ -38,6 +38,8 @@ def _on_close(ws):
 
 def on_market_update(ws, message):
     try:
+        if message == b'\x01':
+            return
         stream_message = stream_pb2.StreamMessage()
         stream_message.ParseFromString(message)
         if str(stream_message.marketUpdate.intervalsUpdate):
