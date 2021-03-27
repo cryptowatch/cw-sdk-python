@@ -18,6 +18,8 @@ class Markets:
         trades=False,
         ohlc=False,
         periods=[],
+        before=False,
+        after=False
     ):
         exchange, pair = market.split(":")
         if ohlc:
@@ -26,6 +28,12 @@ class Markets:
             if periods:
                 sec_periods = translate_periods(periods)
                 resource += "?periods={}".format(",".join(sec_periods))
+            if before:
+                sep = "&" if "?" in resource else "?"
+                resource += "{}before={}".format(sep, before)
+            if after:
+                sep = "&" if "?" in resource else "?"
+                resource += "{}after={}".format(sep, after)
             schema = MarketOHLCAPIResponseSchema()
         elif trades:
             log("Getting market trades {}".format(market))

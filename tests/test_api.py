@@ -124,7 +124,7 @@ def test_markets_endpoints():
 
 def test_markets_endpoints():
     ## Testing getting one market
-    candles = cryptowatch.markets.get("kraken:btcusd", ohlc=True)
+    candles = cryptowatch.markets.get("kraken:btcusd", after=1481663244, ohlc=True)
     # Test candles object structure
     assert hasattr(candles, "of_1m")
     assert hasattr(candles, "of_3m")
