@@ -3,6 +3,8 @@ import pytest
 import cryptowatch
 
 
+curl "https://api.cryptowat.ch/markets/kraken/btceur/price"
+
 def test_assets_endpoints():
     ## Testing getting one asset
     bitcoin = cryptowatch.assets.get("btc")
