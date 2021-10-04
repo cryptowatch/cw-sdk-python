@@ -5,7 +5,7 @@ test-http-real:
 	pytest -vv tests/test_api.py
 
 lint:
-	black cryptowatch/**/*[^pb2].py tests examples
+	black --check cryptowatch/**/*[^pb2].py tests examples
 
 proto:
 	protoc --proto_path=../proto --python_out=cryptowatch/stream/proto ../proto/public/**/*.proto
