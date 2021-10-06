@@ -7,8 +7,8 @@ cw.stream.subscriptions = ["markets:*:trades"]
 
 def handle_trades_update(trade_update):
     """
-        trade_update follows Cryptowatch protocol buffer format:
-        https://github.com/cryptowatch/proto/blob/master/public/markets/market.proto
+    trade_update follows Cryptowatch protocol buffer format:
+    https://github.com/cryptowatch/proto/blob/master/public/markets/market.proto
     """
     market_msg = ">>> Market#{} Exchange#{} Pair#{}: {} New Trades".format(
         trade_update.marketUpdate.market.marketId,
