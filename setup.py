@@ -34,7 +34,7 @@ setup(
         "requests==2.25.1",
         "PyYAML>=5.4",
         "urllib3>=1.26.5",
-        "websocket-client>=0.57.0",
+        "websocket-client>=1.0.0",
         "protobuf>=3.11.3",
     ],
     packages=find_packages(exclude=("tests", "examples")),

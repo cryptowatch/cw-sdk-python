@@ -32,7 +32,7 @@ def _on_error(ws, error):
     log(str(error), is_error=True)
 
 
-def _on_close(ws):
+def _on_close(ws, close_status_code, close_reason):
     log("Connection closed.", is_debug=True)
 
 
