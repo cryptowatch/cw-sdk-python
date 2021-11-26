@@ -1,6 +1,8 @@
 import pathlib
 from setuptools import find_packages, setup
 
+from cryptowatch import __version__
+
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -11,7 +13,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="cryptowatch-sdk",
-    version="0.0.14",
+    version=__version__,
     description="Python bindings for the Cryptowatch API. Cryptocurrency markets, assets, instruments and exchanges data.",
     long_description=README,
     long_description_content_type="text/markdown",
