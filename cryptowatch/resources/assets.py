@@ -1,10 +1,11 @@
 import datetime as dt
 import json
-from marshmallow import Schema, fields, post_load
+from marshmallow import fields, post_load
 
 from cryptowatch.utils import log
-from cryptowatch.resources.allowance import AllowanceSchema, AllowanceResource
-from cryptowatch.resources.markets import MarketSchema, MarketResource
+from cryptowatch.resources.allowance import AllowanceSchema
+from cryptowatch.resources.base import BaseSchema
+from cryptowatch.resources.markets import MarketSchema
 
 
 class Assets:
@@ -57,7 +58,7 @@ class AssetResource:
         return "<Asset({self.name})>".format(self=self)
 
 
-class AssetSchema(Schema):
+class AssetSchema(BaseSchema):
     id = fields.Integer()
     symbol = fields.Str()
     name = fields.Str()
@@ -72,7 +73,7 @@ class AssetSchema(Schema):
         return AssetResource(**data)
 
 
-class AssetAPIResponseSchema(Schema):
+class AssetAPIResponseSchema(BaseSchema):
     result = fields.Nested(AssetSchema)
     allowance = fields.Nested(AllowanceSchema, partial=("account",), missing=None)
 
@@ -81,7 +82,7 @@ class AssetAPIResponseSchema(Schema):
         return AssetAPIResponse(**data)
 
 
-class AssetListAPIResponseSchema(Schema):
+class AssetListAPIResponseSchema(BaseSchema):
     result = fields.Nested(AssetSchema, many=True)
     allowance = fields.Nested(AllowanceSchema, partial=("account",), missing=None)
 

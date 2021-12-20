@@ -1,9 +1,10 @@
 import datetime as dt
 import json
-from marshmallow import Schema, fields, post_load
+from marshmallow import fields, post_load
 
 from cryptowatch.utils import log, translate_periods
 from cryptowatch.resources.allowance import AllowanceSchema
+from cryptowatch.resources.base import BaseSchema
 
 
 class Markets:
@@ -91,7 +92,7 @@ class MarketResource:
         return "<Market({self.exchange}:{self.pair})>".format(self=self)
 
 
-class MarketSchema(Schema):
+class MarketSchema(BaseSchema):
 
     id = fields.Integer()
     exchange = fields.Str()
@@ -115,7 +116,7 @@ class MarketSummaryResource:
         return "<MarketSummary({self.price})>".format(self=self)
 
 
-class MarketSummaryPriceSchema(Schema):
+class MarketSummaryPriceSchema(BaseSchema):
 
     change = fields.Dict(keys=fields.Str(), values=fields.Float())
     last = fields.Float()
@@ -139,7 +140,7 @@ class MarketSummaryPriceResource:
         return "<MarketSummaryPriceResource({self.last})>".format(self=self)
 
 
-class MarketSummarySchema(Schema):
+class MarketSummarySchema(BaseSchema):
 
     price = fields.Nested(MarketSummaryPriceSchema)
     volume = fields.Float()
@@ -150,7 +151,7 @@ class MarketSummarySchema(Schema):
         return MarketSummaryResource(**data)
 
 
-class LiquidityLevelSchema(Schema):
+class LiquidityLevelSchema(BaseSchema):
     base = fields.Dict(keys=fields.Str(), values=fields.Str())
     quote = fields.Dict(keys=fields.Str(), values=fields.Str())
 
@@ -165,7 +166,7 @@ class LiquidityLevelResource:
         self.base = base
 
 
-class LiquiditySchema(Schema):
+class LiquiditySchema(BaseSchema):
     bid = fields.Nested(LiquidityLevelSchema)
     ask = fields.Nested(LiquidityLevelSchema)
 
@@ -180,7 +181,7 @@ class LiquidityResource:
         self.ask = ask
 
 
-class MarketLiquidityAPIResponseSchema(Schema):
+class MarketLiquidityAPIResponseSchema(BaseSchema):
     result = fields.Nested(LiquiditySchema)
     allowance = fields.Nested(AllowanceSchema, partial=("account",), missing=None)
 
@@ -195,16 +196,16 @@ class MarketLiquidityAPIResponse:
         self._allowance = allowance
 
     def __repr__(self):
-        return "<MarketLiquidityAPIResponse()>".format(self=self)
+        return "<MarketLiquidityAPIResponse()>"
 
 
-class OrdeBookSchema(Schema):
+class OrdeBookSchema(BaseSchema):
     bids = fields.List(fields.List(fields.Float))
     asks = fields.List(fields.List(fields.Float))
     seqNum = fields.Integer()
 
 
-class MarketOrderBookAPIResponseSchema(Schema):
+class MarketOrderBookAPIResponseSchema(BaseSchema):
     result = fields.Nested(OrdeBookSchema)
     allowance = fields.Nested(AllowanceSchema, partial=("account",), missing=None)
 
@@ -221,10 +222,10 @@ class MarketOrderBookAPIResponse:
         self._allowance = allowance
 
     def __repr__(self):
-        return "<MarketOrderBookAPIResponse()>".format(self=self)
+        return "<MarketOrderBookAPIResponse()>"
 
 
-class MarketTradesAPIResponseSchema(Schema):
+class MarketTradesAPIResponseSchema(BaseSchema):
     result = fields.List(fields.List(fields.Float))
     allowance = fields.Nested(AllowanceSchema, partial=("account",), missing=None)
 
@@ -243,7 +244,7 @@ class MarketTradesAPIResponse:
         return "<MarketTradeAPIResponse({self.trades})>".format(self=self)
 
 
-class MarketOHLCAPIResponseSchema(Schema):
+class MarketOHLCAPIResponseSchema(BaseSchema):
     result = fields.Dict(fields.Str(), fields.List(fields.List(fields.Float)))
     allowance = fields.Nested(AllowanceSchema, partial=("account",), missing=None)
 
@@ -298,7 +299,7 @@ class MarketOHLCAPIResponse:
         return "<MarketOHLCAPIResponse()>"
 
 
-class MarketSummaryAPIResponseSchema(Schema):
+class MarketSummaryAPIResponseSchema(BaseSchema):
     result = fields.Nested(MarketSummarySchema)
     allowance = fields.Nested(AllowanceSchema, partial=("account",), missing=None)
 
@@ -327,7 +328,7 @@ class MarketAPIResponse:
         return "<MarketAPIResponse({self.market})>".format(self=self)
 
 
-class MarketAPIResponseSchema(Schema):
+class MarketAPIResponseSchema(BaseSchema):
     result = fields.Nested(MarketSchema)
     allowance = fields.Nested(AllowanceSchema, partial=("account",), missing=None)
 
@@ -336,7 +337,7 @@ class MarketAPIResponseSchema(Schema):
         return MarketAPIResponse(**data)
 
 
-class MarketListAPIResponseSchema(Schema):
+class MarketListAPIResponseSchema(BaseSchema):
     result = fields.Nested(MarketSchema, many=True)
     allowance = fields.Nested(AllowanceSchema, partial=("account",), missing=None)
 

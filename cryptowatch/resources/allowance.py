@@ -1,7 +1,9 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import fields, post_load
+
+from cryptowatch.resources.base import BaseSchema
 
 
-class AllowanceSchema(Schema):
+class AllowanceSchema(BaseSchema):
     cost = fields.Integer()
     remaining = fields.Integer()
     remainingPaid = fields.Integer(missing=0)
