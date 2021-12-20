@@ -23,3 +23,6 @@ jobs:
       - name: Test
         run: |
           make test
+      - name: Test http
+        run: |
+          make test-http-real
