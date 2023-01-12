@@ -1,7 +1,9 @@
 import sys
 import traceback
 import json
+from urllib.parse import urlencode
 from urllib3.util.retry import Retry
+
 
 import cryptowatch
 from cryptowatch.utils import log
@@ -68,12 +70,18 @@ class Requestor:
         a = requests.adapters.HTTPAdapter(max_retries=retries)
         self.api_client.mount("https://", a)
 
-    def get_resource(self, resource):
+    def get_resource(self, resource, query=None):
         try:
             headers = {"User-Agent": self.user_agent, "Accept": "application/json"}
             if cryptowatch.api_key:
                 headers["X-CW-API-Key"] = cryptowatch.api_key
-            url = "{}{}".format(self.rest_endpoint, resource)
+
+            url = f"{self.rest_endpoint}{resource}"
+
+            if query:
+                querystring = urlencode(query)
+                url = f"{url}?{querystring}"
+
             log("HTTP GET {}\n\twith headers: {}".format(url, headers), is_debug=True)
             resp = self.api_client.get(
                 url,

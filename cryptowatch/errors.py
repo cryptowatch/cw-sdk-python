@@ -47,3 +47,8 @@ class APIError(CryptowatchError):
 class CredentialsFileError(CryptowatchError):
     def __repr__(self):
         return "{}(message={})".format(self.__class__.__name__, self._message)
+
+
+class InvalidRequestError(CryptowatchError):
+    def __repr__(self):
+        return "{}(message={})".format(self.__class__.__name__, self._message)

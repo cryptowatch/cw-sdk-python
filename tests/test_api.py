@@ -23,9 +23,10 @@ def test_assets_endpoints():
     assert bitcoin.asset.symbol == "btc"
     assert bitcoin.asset.fiat == False
     # Testing listing all assets
-    assets = cryptowatch.assets.list()
+    assets = cryptowatch.assets.list(limit=2)
     assert hasattr(assets, "assets")
     assert type(assets.assets) == type(list())
+    assert len(assets.assets) == 2
     assert type(assets.assets[0]) == cryptowatch.resources.assets.BaseResource
     # This should raise an APIResourceNotFoundError Exception
     with pytest.raises(cryptowatch.errors.APIResourceNotFoundError):
@@ -53,9 +54,10 @@ def test_instruments_endpoints():
     assert market.instrument.quote.symbol == "usd"
     assert market.instrument.route.startswith("https")
     # Testing listing all instruments
-    instruments = cryptowatch.instruments.list()
+    instruments = cryptowatch.instruments.list(limit=2)
     assert hasattr(instruments, "instruments")
     assert type(instruments.instruments) == type(list())
+    assert len(instruments.instruments) == 2
     assert (
         type(instruments.instruments[0])
         == cryptowatch.resources.instruments.BaseResource
@@ -108,19 +110,20 @@ def test_markets_endpoints():
     assert market.market.price.last >= 0
     assert market.market.price.low <= market.market.price.high
     # Testing listing all markets on all exchange
-    markets = cryptowatch.markets.list()
+    markets = cryptowatch.markets.list(limit=2)
     assert hasattr(markets, "markets")
     assert type(markets.markets) == type(list())
-    assert type(markets.markets[0]) == cryptowatch.resources.markets.MarketResource
+    assert len(markets.markets) == 2
+    assert type(markets.markets[0]) == cryptowatch.resources.base.BaseResource
     # Testing lst
     kraken_markets = cryptowatch.markets.list("kraken")
-    assert len(kraken_markets.markets) < len(markets.markets)
+    assert kraken_markets.markets[0].exchange == "kraken"
     # This should raise an APIResourceNotFoundError Exception
     with pytest.raises(cryptowatch.errors.APIResourceNotFoundError):
         cryptowatch.markets.get("marketthatdoesntexists:shitcoinusd")
 
 
-def test_markets_endpoints():
+def test_markets_endpoints_ohlc():
     ## Testing getting one market
     candles = cryptowatch.markets.get("kraken:btcusd", ohlc=True)
     # Test candles object structure
@@ -141,9 +144,21 @@ def test_markets_endpoints():
     assert type(candles.of_1m) == type(list())
     assert type(candles.of_1w) == type(list())
     assert type(candles.of_1w_monday) == type(list())
+    # test candles with period
+    candles = cryptowatch.markets.get("kraken:btcusd", ohlc=True, periods=["1m"])
+    # Test candles object structure
+    assert hasattr(candles, "of_1m")
     # This should raise an APIResourceNotFoundError Exception
     with pytest.raises(cryptowatch.errors.APIResourceNotFoundError):
         cryptowatch.markets.get("candlesthatdoesntexists:shitcoinusd", ohlc=True)
+
+
+def test_markets_endpoints_trades():
+    trades = cryptowatch.markets.get("kraken:btcusd", trades=True, limit=1)
+    assert hasattr(trades, "trades")
+    assert type(trades.trades) == type(list())
+    assert len(trades.trades) == 1
+    assert type(trades.trades[0]) == type(list())
 
 
 def test_unknown_api_key():

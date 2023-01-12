@@ -2,12 +2,15 @@ import datetime as dt
 import json
 from marshmallow import fields, post_load
 
-from cryptowatch.utils import log, translate_periods
+from cryptowatch.utils import log, translate_periods, validate_limit, validate_unix_timestamp
 from cryptowatch.resources.allowance import AllowanceSchema
 from cryptowatch.resources.base import BaseResource, BaseSchema
 
 
 class Markets:
+    LIST_MAX_LIMIT = 20000
+    TRADES_MAX_LIMIT = 1000
+
     def __init__(self, http_client):
         self.client = http_client
 
@@ -19,17 +22,33 @@ class Markets:
         trades=False,
         ohlc=False,
         periods=[],
+        limit=None,
+        trades_since=None,
+        ohlc_before=None,
+        ohlc_after=None,
     ):
+        query = {}
         exchange, pair = market.split(":")
         if ohlc:
             log("Getting market OHLC candles {}".format(market))
             resource = "/markets/{}/{}/ohlc".format(exchange, pair)
             if periods:
-                sec_periods = translate_periods(periods)
-                resource += "?periods={}".format(",".join(sec_periods))
+                query["periods"] = ",".join(translate_periods(periods))
+            if ohlc_before:
+                validate_unix_timestamp(ohlc_before)
+                query["before"] = ohlc_before
+            if ohlc_after:
+                validate_unix_timestamp(ohlc_after)
+                query["after"] = ohlc_after
             schema = MarketOHLCAPIResponseSchema()
         elif trades:
             log("Getting market trades {}".format(market))
+            if limit:
+                validate_limit(limit, self.TRADES_MAX_LIMIT)
+                query["limit"] = limit
+            if trades_since:
+                validate_unix_timestamp(trades_since)
+                query["since"] = trades_since
             resource = "/markets/{}/{}/trades".format(exchange, pair)
             schema = MarketTradesAPIResponseSchema()
         elif orderbook:
@@ -44,7 +63,7 @@ class Markets:
             log("Getting market summary {}".format(market))
             resource = "/markets/{}/{}/summary".format(exchange, pair)
             schema = MarketSummaryAPIResponseSchema()
-        data, http_resp = self.client.get_resource(resource)
+        data, http_resp = self.client.get_resource(resource, query=query)
         market_resp = json.loads(data)
         market_obj = schema.load(market_resp)
         if market_obj._allowance:
@@ -56,14 +75,22 @@ class Markets:
         market_obj._http_response = http_resp
         return market_obj
 
-    def list(self, exchange=None):
+    def list(self, exchange=None, limit=None):
+        query = {}
+
         if exchange:
             resource = "/markets/{}".format(exchange)
             log("Getting all markets for {}".format(exchange))
         else:
+            # Exchange filter does not support limit query
+            if limit and not exchange:
+                validate_limit(limit, self.LIST_MAX_LIMIT)
+                query["limit"] = limit
+
             resource = "/markets"
             log("Getting all markets for all exchanges")
-        data, http_resp = self.client.get_resource(resource)
+
+        data, http_resp = self.client.get_resource(resource, query=query)
         market_resp = json.loads(data)
         schema = MarketListAPIResponseSchema()
         markets_obj = schema.load(market_resp)

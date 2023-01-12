@@ -2,6 +2,8 @@ import os
 import logging
 import json
 
+from cryptowatch.errors import InvalidRequestError
+
 
 cw_logger = logging.getLogger("cryptowatch")
 
@@ -26,7 +28,6 @@ def log(msg, is_warning=False, is_error=False, is_debug=False):
 
 
 def translate_periods(periods):
-
     mapping = {
         "1m": "60",
         "3m": "180",
@@ -47,6 +48,18 @@ def translate_periods(periods):
     for p in periods:
         sec_periods.append(mapping.get(str(p).lower()))
     return sec_periods
+
+
+def validate_limit(limit, maximum):
+    if not limit > 0 and limit <= maximum:
+        raise InvalidRequestError(f"Invalid limit of {limit}. Must be between 1 and {maximum}.")
+
+
+def validate_unix_timestamp(timestamp):
+    try:
+        int(timestamp)
+    except ValueError:
+        raise InvalidRequestError(f"Invalid unix timestamp of {timestamp}. Must be an int.")
 
 
 def forge_stream_subscription_payload(resources, client_pb2=None):

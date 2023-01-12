@@ -121,7 +121,6 @@ def test_server_error(requests_mock):
         text='{"error": "bad"}',
     )
     with pytest.raises(cryptowatch.errors.APIServerError) as ex:
-        print(ex)
         cryptowatch.assets.get(asset_symbol)
 
 

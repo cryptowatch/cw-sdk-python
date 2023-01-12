@@ -2,13 +2,15 @@ import datetime as dt
 import json
 from marshmallow import fields, post_load
 
-from cryptowatch.utils import log
+from cryptowatch.utils import log, validate_limit
 from cryptowatch.resources.allowance import AllowanceSchema
 from cryptowatch.resources.base import BaseResource, BaseSchema
 from cryptowatch.resources.markets import MarketSchema
 
 
 class Assets:
+    MAX_LIMIT = 5000
+
     def __init__(self, http_client):
         self.client = http_client
 
@@ -27,9 +29,16 @@ class Assets:
         asset_obj._http_response = http_resp
         return asset_obj
 
-    def list(self):
+    def list(self, limit=None):
+        query = {}
+
         log("Listing all assets")
-        data, http_resp = self.client.get_resource("/assets")
+
+        if limit:
+            validate_limit(limit, self.MAX_LIMIT)
+            query["limit"] = limit
+
+        data, http_resp = self.client.get_resource("/assets", query=query)
         asset_resp = json.loads(data)
         schema = AssetListAPIResponseSchema()
         assets_obj = schema.load(asset_resp)
