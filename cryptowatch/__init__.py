@@ -13,14 +13,18 @@ __version__ = "0.0.16"
 sdk_version = __version__
 
 
+DEFAULT_REST_ENDPOINT = "https://api.cryptowat.ch"
+DEFAULT_WS_ENDPOINT = "wss://stream.cryptowat.ch/connect"
+
+
 # Try to read and set API endpoints from credential file
 api_key, rest_endpoint, ws_endpoint = read_config()
 
 # API default endpoints
 if not rest_endpoint:
-    rest_endpoint = "https://api.cryptowat.ch"
+    rest_endpoint = DEFAULT_REST_ENDPOINT
 if not ws_endpoint:
-    ws_endpoint = "wss://stream.cryptowat.ch/connect"
+    ws_endpoint = DEFAULT_WS_ENDPOINT
 
 
 def is_authenticated():
