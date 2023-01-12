@@ -2,7 +2,12 @@ import datetime as dt
 import json
 from marshmallow import fields, post_load
 
-from cryptowatch.utils import log, translate_periods, validate_limit, validate_unix_timestamp
+from cryptowatch.utils import (
+    log,
+    translate_periods,
+    validate_limit,
+    validate_unix_timestamp,
+)
 from cryptowatch.resources.allowance import AllowanceSchema
 from cryptowatch.resources.base import BaseResource, BaseSchema
 

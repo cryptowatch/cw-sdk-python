@@ -49,7 +49,8 @@ class AssetsTests(TestCase):
 
     def test_get(self, requests_mock):
         asset_id = "10set"
-        payload = """
+        payload = (
+            """
         {
             "result": {
                 "id": 5478,
@@ -85,7 +86,9 @@ class AssetsTests(TestCase):
                 "upgrade": "For unlimited API access, create an account at https://cryptowat.ch"
             }
         }
-        """ % asset_id
+        """
+            % asset_id
+        )
         requests_mock.get(
             f"{DEFAULT_REST_ENDPOINT}/assets/{asset_id}",
             status_code=200,
@@ -139,7 +142,8 @@ class ExchangesTests(TestCase):
 
     def test_get(self, requests_mock):
         exchange_id = "kraken"
-        payload = """
+        payload = (
+            """
         {
             "result": {
                 "id": 4,
@@ -156,7 +160,9 @@ class ExchangesTests(TestCase):
                 "upgrade": "For unlimited API access, create an account at https://cryptowat.ch"
             }
         }
-        """ % exchange_id
+        """
+            % exchange_id
+        )
         requests_mock.get(
             f"{DEFAULT_REST_ENDPOINT}/exchanges/{exchange_id}",
             status_code=200,
@@ -240,7 +246,8 @@ class InstrumentsTests(TestCase):
 
     def test_get(self, requests_mock):
         instrument_id = "ethphp"
-        payload = """
+        payload = (
+            """
         {
             "result": {
                 "id": 1,
@@ -282,7 +289,9 @@ class InstrumentsTests(TestCase):
                 "upgrade": "For unlimited API access, create an account at https://cryptowat.ch"
             }
         }
-        """ % instrument_id
+        """
+            % instrument_id
+        )
         requests_mock.get(
             f"{DEFAULT_REST_ENDPOINT}/pairs/{instrument_id}",
             status_code=200,
