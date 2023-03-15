@@ -68,9 +68,9 @@ for market in kraken.markets:
 * websocket-client v0.56+
 * protobuf v3.11.3+
 
-## API Crendential
+## API Credentials
 
-Using a credential file will allow you to authenticate your requests and grant you the API access of your Cryptowatch account.
+Using a credentials file will allow you to authenticate your requests and grant you the API access of your Cryptowatch account.
 
 Your account Credits will be consumed for the REST and WebSocket API. Specific Credit cost details can be found on the [Pricing page](https://cryptowat.ch/pricing).
 
