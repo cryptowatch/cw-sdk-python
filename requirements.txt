@@ -26,7 +26,7 @@ pytest-mock==3.6.1
 PyYAML==5.4.1
 readme-renderer==30.0
 regex==2021.9.30
-requests==2.25.1
+requests==2.31.0
 requests-mock==1.9.3
 requests-toolbelt==0.9.1
 rfc3986==1.5.0

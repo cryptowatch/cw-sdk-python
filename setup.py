@@ -33,7 +33,7 @@ setup(
     ],
     install_requires=[
         "marshmallow==3.13.0",
-        "requests==2.25.1",
+        "requests==2.31.0",
         "PyYAML>=5.4",
         "urllib3>=1.26.5",
         "websocket-client>=1.0.0",
