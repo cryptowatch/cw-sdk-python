@@ -19,7 +19,7 @@ platformdirs==2.4.0
 pluggy==1.0.0
 protobuf==3.18.1
 py==1.10.0
-Pygments==2.10.0
+Pygments==2.15.0
 pyparsing==2.4.7
 pytest==6.2.5
 pytest-mock==3.6.1
